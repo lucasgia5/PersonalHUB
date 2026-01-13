@@ -1,0 +1,153 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "PersonalHub",
+      "archetype": "The Performance Pro (Light Mode Variant)",
+      "vibe": "Energetic, Clinical, Efficient, Motivational",
+      "target_audience": "Professional Personal Trainers"
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Manrope, sans-serif",
+        "body": "Inter, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "scale": {
+        "h1": "text-4xl md:text-5xl font-bold tracking-tight",
+        "h2": "text-3xl font-bold tracking-tight",
+        "h3": "text-2xl font-semibold tracking-tight",
+        "body_lg": "text-lg leading-relaxed",
+        "body_base": "text-base leading-relaxed",
+        "caption": "text-sm text-muted-foreground"
+      }
+    },
+    "colors": {
+      "palette": {
+        "primary": {
+          "name": "Electric Blue",
+          "hex": "#2563EB",
+          "tailwind": "blue-600",
+          "usage": "Primary CTAs, Active States, Key Highlights"
+        },
+        "secondary": {
+          "name": "Vitality Green",
+          "hex": "#16A34A",
+          "tailwind": "green-600",
+          "usage": "Success states, Growth metrics, Positive trends"
+        },
+        "background": {
+          "main": "#F8FAFC",
+          "surface": "#FFFFFF",
+          "sidebar": "#FFFFFF"
+        },
+        "text": {
+          "primary": "#0F172A",
+          "secondary": "#64748B",
+          "muted": "#94A3B8"
+        },
+        "border": {
+          "default": "#E2E8F0",
+          "subtle": "#F1F5F9"
+        }
+      },
+      "gradients": {
+        "primary_action": "bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600",
+        "success_badge": "bg-green-50 text-green-700 border border-green-200"
+      }
+    },
+    "spacing": {
+      "container_padding": "p-4 md:p-8 lg:p-12",
+      "section_gap": "gap-8",
+      "component_gap": "gap-4",
+      "radius": {
+        "default": "rounded-xl",
+        "button": "rounded-full",
+        "card": "rounded-xl"
+      }
+    },
+    "shadows": {
+      "card": "shadow-sm hover:shadow-md transition-shadow duration-200",
+      "floating": "shadow-lg shadow-blue-900/5"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-blue-600 text-white hover:bg-blue-700 rounded-full px-6 py-2 font-medium transition-all active:scale-95",
+      "secondary": "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 rounded-full px-6 py-2 font-medium transition-all",
+      "ghost": "text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded-lg px-4 py-2"
+    },
+    "cards": {
+      "default": "bg-white border border-slate-100 rounded-xl shadow-sm p-6",
+      "interactive": "bg-white border border-slate-100 rounded-xl shadow-sm p-6 hover:border-blue-200 hover:shadow-md transition-all cursor-pointer"
+    },
+    "inputs": {
+      "default": "bg-slate-50 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg h-11"
+    },
+    "badges": {
+      "default": "bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full text-xs font-medium",
+      "success": "bg-green-50 text-green-700 border border-green-200 px-2.5 py-0.5 rounded-full text-xs font-medium",
+      "warning": "bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-0.5 rounded-full text-xs font-medium"
+    }
+  },
+  "layout_strategies": {
+    "dashboard": {
+      "type": "Bento Grid",
+      "structure": "grid grid-cols-1 md:grid-cols-3 gap-6",
+      "rules": [
+        "KPI Cards (Active Students, Workouts) take top row",
+        "Recent Activity list takes full height on side or bottom",
+        "Use whitespace to separate data density"
+      ]
+    },
+    "student_profile": {
+      "type": "Tabbed Interface",
+      "structure": "Header with Avatar -> Tabs (Info, Workout, Evolution)",
+      "rules": [
+        "Sticky header on mobile",
+        "Tabs must be large enough for touch targets",
+        "Content area has white background with padding"
+      ]
+    },
+    "mobile_nav": {
+      "type": "Bottom Navigation (Mobile) / Sidebar (Desktop)",
+      "rules": [
+        "Mobile: Fixed bottom bar with icons for Dashboard, Students, Workouts, Profile",
+        "Desktop: Clean sidebar with logo at top"
+      ]
+    }
+  },
+  "assets": {
+    "images": {
+      "login_hero": {
+        "url": "https://images.unsplash.com/photo-1745329532608-bbda3b742e00?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxwZXJzb25hbCUyMHRyYWluZXIlMjBneW0lMjB3b3Jrb3V0fGVufDB8fHx8MTc2ODMzMjIyM3ww&ixlib=rb-4.1.0&q=85",
+        "alt": "Personal trainer adjusting weights in gym",
+        "usage": "Login page split screen image"
+      },
+      "empty_state_workout": {
+        "url": "https://images.unsplash.com/photo-1745329532588-1394a50671f0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwyfHxwZXJzb25hbCUyMHRyYWluZXIlMjBneW0lMjB3b3Jrb3V0fGVufDB8fHx8MTc2ODMzMjIyM3ww&ixlib=rb-4.1.0&q=85",
+        "alt": "Man preparing for shoulder press",
+        "usage": "Empty state for workouts list"
+      },
+      "avatars": [
+        "https://images.unsplash.com/photo-1644870514410-ca634ac07c41?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwxfHxmaXRuZXNzJTIwcG9ydHJhaXQlMjBzbWlsaW5nJTIwcGVyc29ufGVufDB8fHx8MTc2ODMzMjIzOHww&ixlib=rb-4.1.0&q=85",
+        "https://images.unsplash.com/photo-1620862657760-72a639a2daef?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwyfHxmaXRuZXNzJTIwcG9ydHJhaXQlMjBzbWlsaW5nJTIwcGVyc29ufGVufDB8fHx8MTc2ODMzMjIzOHww&ixlib=rb-4.1.0&q=85",
+        "https://images.unsplash.com/photo-1582760415700-b46884ceab0f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwzfHxmaXRuZXNzJTIwcG9ydHJhaXQlMjBzbWlsaW5nJTIwcGVyc29ufGVufDB8fHx8MTc2ODMzMjIyM3ww&ixlib=rb-4.1.0&q=85"
+      ]
+    },
+    "icons": {
+      "library": "lucide-react",
+      "style": "Stroke width 1.5px, rounded joins"
+    }
+  },
+  "universal_guidelines": [
+    "Use 'Manrope' for all headings to give a modern, fitness-tech feel.",
+    "Primary Blue (#2563EB) is for ACTIONS. Green (#16A34A) is for RESULTS/STATUS.",
+    "Avoid pure black. Use Slate-900 (#0F172A) for high contrast text.",
+    "Cards must have 'p-6' padding minimum to feel spacious.",
+    "Mobile First: All tables must have a card-view alternative for mobile screens.",
+    "Use 'sonner' for all toast notifications.",
+    "Interactive elements must have a hover state that includes a slight color shift or lift.",
+    "Do not use gradients for backgrounds, only for subtle accents or buttons.",
+    "All inputs must have 'data-testid' attributes."
+  ]
+}
