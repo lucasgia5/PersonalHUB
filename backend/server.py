@@ -144,6 +144,22 @@ class Evolution(BaseModel):
     performance: Optional[str] = None
     created_at: str
 
+class WeeklyRoutineCreate(BaseModel):
+    student_id: str
+    day_of_week: int
+    workout_name: str
+    exercises: Optional[list] = None
+
+class WeeklyRoutine(BaseModel):
+    id: str
+    user_id: str
+    student_id: str
+    day_of_week: int
+    workout_name: str
+    exercises: Optional[list] = None
+    created_at: str
+    updated_at: str
+
 async def verify_token(authorization: str = Header(None)) -> str:
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Token de autenticação não fornecido")
