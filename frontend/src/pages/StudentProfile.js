@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { ArrowLeft, Plus, Dumbbell, Activity, TrendingUp, Trash2, Calendar } from 'lucide-react'
+import { WeeklyRoutine } from '@/components/WeeklyRoutine'
 import axios from 'axios'
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`
@@ -28,14 +29,22 @@ export function StudentProfile() {
   const [showAddEvolution, setShowAddEvolution] = useState(false)
   const [showExercises, setShowExercises] = useState(false)
   const [showExerciseHistory, setShowExerciseHistory] = useState(false)
+  const [showCardioDetails, setShowCardioDetails] = useState(false)
   const [selectedWorkout, setSelectedWorkout] = useState(null)
   const [selectedExercise, setSelectedExercise] = useState(null)
+  const [selectedCardio, setSelectedCardio] = useState(null)
   const [exercises, setExercises] = useState([])
   const [exerciseHistory, setExerciseHistory] = useState([])
 
-  const [newWorkout, setNewWorkout] = useState({ name: '' })
+  const [newWorkout, setNewWorkout] = useState({ name: '', date: new Date().toISOString().split('T')[0] })
   const [newExercise, setNewExercise] = useState({ name: '', sets: '', reps: '', weight: '', rest: '' })
-  const [newCardio, setNewCardio] = useState({ equipment: 'esteira', duration: '', intensity: 'moderado', observations: '' })
+  const [newCardio, setNewCardio] = useState({ 
+    equipment: 'esteira', 
+    duration: '', 
+    intensity: 'moderado', 
+    observations: '',
+    date: new Date().toISOString().split('T')[0]
+  })
   const [newEvolution, setNewEvolution] = useState({ date: new Date().toISOString().split('T')[0], current_weight: '', observations: '', performance: '' })
   const [newHistory, setNewHistory] = useState({ date: new Date().toISOString().split('T')[0], weight: '', sets: '', reps: '', observations: '' })
 
@@ -124,13 +133,13 @@ export function StudentProfile() {
         { ...newWorkout, student_id: id },
         { headers: { Authorization: `Bearer ${session?.access_token}` } }
       )
-      toast.success('Treino criado com sucesso!')
+      toast.success('Treino adicionado ao histórico!')
       setShowAddWorkout(false)
-      setNewWorkout({ name: '' })
+      setNewWorkout({ name: '', date: new Date().toISOString().split('T')[0] })
       loadWorkouts()
     } catch (error) {
-      console.error('Erro ao criar treino:', error)
-      toast.error('Erro ao criar treino')
+      console.error('Erro ao adicionar treino:', error)
+      toast.error('Erro ao adicionar treino')
     }
   }
 
@@ -182,11 +191,30 @@ export function StudentProfile() {
       )
       toast.success('Cardio adicionado!')
       setShowAddCardio(false)
-      setNewCardio({ equipment: 'esteira', duration: '', intensity: 'moderado', observations: '' })
+      setNewCardio({ 
+        equipment: 'esteira', 
+        duration: '', 
+        intensity: 'moderado', 
+        observations: '',
+        date: new Date().toISOString().split('T')[0]
+      })
       loadCardios()
     } catch (error) {
       console.error('Erro ao adicionar cardio:', error)
       toast.error('Erro ao adicionar cardio')
+    }
+  }
+
+  async function handleDeleteCardio(cardioId) {
+    try {
+      await axios.delete(`${API}/cardio/${cardioId}`, {
+        headers: { Authorization: `Bearer ${session?.access_token}` },
+      })
+      toast.success('Cardio excluído!')
+      loadCardios()
+    } catch (error) {
+      console.error('Erro ao excluir cardio:', error)
+      toast.error('Erro ao excluir cardio')
     }
   }
 
@@ -245,6 +273,17 @@ export function StudentProfile() {
     setShowExerciseHistory(true)
   }
 
+  function openCardioDetails(cardio) {
+    setSelectedCardio(cardio)
+    setShowCardioDetails(true)
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return 'Data não informada'
+    const date = new Date(dateStr + 'T00:00:00')
+    return date.toLocaleDateString('pt-BR')
+  }
+
   if (loading || !student) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
@@ -287,14 +326,17 @@ export function StudentProfile() {
         </div>
 
         <Tabs defaultValue="info" className="w-full">
-          <TabsList className="w-full justify-start bg-white border border-slate-200 p-1 rounded-lg mb-6">
-            <TabsTrigger value="info" className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-md" data-testid="tab-info">
+          <TabsList className="w-full justify-start bg-white border border-slate-200 p-1 rounded-lg mb-6 overflow-x-auto">
+            <TabsTrigger value="info" className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-md whitespace-nowrap" data-testid="tab-info">
               Dados
             </TabsTrigger>
-            <TabsTrigger value="workout" className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-md" data-testid="tab-workout">
-              Treino
+            <TabsTrigger value="routine" className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-md whitespace-nowrap" data-testid="tab-routine">
+              Rotina de treinos
             </TabsTrigger>
-            <TabsTrigger value="evolution" className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-md" data-testid="tab-evolution">
+            <TabsTrigger value="history" className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-md whitespace-nowrap" data-testid="tab-history">
+              Histórico de treinos
+            </TabsTrigger>
+            <TabsTrigger value="evolution" className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white rounded-md whitespace-nowrap" data-testid="tab-evolution">
               Evolução
             </TabsTrigger>
           </TabsList>
@@ -319,7 +361,7 @@ export function StudentProfile() {
                 </div>
                 <div>
                   <label className="text-sm text-slate-500 block mb-1">Cadastrado em</label>
-                  <p className="text-slate-900 font-medium">{new Date(student.created_at).toLocaleDateString('pt-BR')}</p>
+                  <p className="text-slate-900 font-medium">{formatDate(student.created_at.split('T')[0])}</p>
                 </div>
               </div>
               {student.observations && (
@@ -331,16 +373,26 @@ export function StudentProfile() {
             </div>
           </TabsContent>
 
-          <TabsContent value="workout">
+          <TabsContent value="routine">
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-100">
+              <WeeklyRoutine 
+                studentId={id} 
+                workouts={workouts}
+                onExerciseClick={openExercises}
+              />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="history">
             <div className="space-y-6">
               <div className="flex gap-3">
                 <Button
                   onClick={() => setShowAddWorkout(true)}
                   className="bg-blue-600 hover:bg-blue-700 rounded-full"
-                  data-testid="create-workout-button"
+                  data-testid="add-workout-button"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Criar Treino
+                  Adicionar Exercícios
                 </Button>
                 <Button
                   onClick={() => setShowAddCardio(true)}
@@ -355,24 +407,27 @@ export function StudentProfile() {
               <div>
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <Dumbbell className="w-5 h-5 text-blue-600" />
-                  Treinos
+                  Treinos Realizados
                 </h3>
-                {workouts.length === 0 ? (
+                {workouts.filter(w => w.date).length === 0 ? (
                   <div className="bg-white rounded-xl p-8 text-center border border-slate-100">
-                    <p className="text-slate-500">Nenhum treino criado ainda</p>
+                    <p className="text-slate-500">Nenhum treino registrado ainda</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {workouts.map((workout) => (
+                    {workouts.filter(w => w.date).map((workout) => (
                       <div
                         key={workout.id}
                         onClick={() => openExercises(workout.id)}
                         className="bg-white rounded-xl p-4 border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all cursor-pointer"
                         data-testid={`workout-card-${workout.id}`}
                       >
-                        <h4 className="font-semibold text-slate-900">{workout.name}</h4>
-                        <p className="text-sm text-slate-500 mt-1">
-                          Criado em {new Date(workout.created_at).toLocaleDateString('pt-BR')}
+                        <div className="flex justify-between items-start mb-2">
+                          <h4 className="font-semibold text-slate-900">{workout.name}</h4>
+                          <Calendar className="w-4 h-4 text-slate-400" />
+                        </div>
+                        <p className="text-sm text-slate-600">
+                          {formatDate(workout.date)}
                         </p>
                       </div>
                     ))}
@@ -383,30 +438,41 @@ export function StudentProfile() {
               <div>
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <Activity className="w-5 h-5 text-green-600" />
-                  Cardio
+                  Cardio Realizados
                 </h3>
                 {cardios.length === 0 ? (
                   <div className="bg-white rounded-xl p-8 text-center border border-slate-100">
                     <p className="text-slate-500">Nenhum cardio registrado</p>
                   </div>
                 ) : (
-                  <div className="bg-white rounded-xl divide-y border border-slate-100">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {cardios.map((cardio) => (
-                      <div key={cardio.id} className="p-4">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <p className="font-semibold text-slate-900 capitalize">{cardio.equipment}</p>
-                            <p className="text-sm text-slate-600 mt-1">
-                              {cardio.duration} min • {cardio.intensity}
-                            </p>
-                            {cardio.observations && (
-                              <p className="text-sm text-slate-500 mt-1">{cardio.observations}</p>
-                            )}
-                          </div>
-                          <span className="text-xs text-slate-400">
-                            {new Date(cardio.created_at).toLocaleDateString('pt-BR')}
-                          </span>
+                      <div
+                        key={cardio.id}
+                        onClick={() => openCardioDetails(cardio)}
+                        className="bg-white rounded-xl p-4 border border-slate-100 hover:border-green-200 hover:shadow-md transition-all cursor-pointer"
+                        data-testid={`cardio-card-${cardio.id}`}
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <p className="font-semibold text-slate-900 capitalize">{cardio.equipment}</p>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleDeleteCardio(cardio.id)
+                            }}
+                            className="h-6 w-6 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </Button>
                         </div>
+                        <p className="text-sm text-slate-600">
+                          {cardio.duration} min • {cardio.intensity}
+                        </p>
+                        <p className="text-xs text-slate-400 mt-2">
+                          {formatDate(cardio.date)}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -439,7 +505,7 @@ export function StudentProfile() {
                         <div className="flex items-center gap-3">
                           <Calendar className="w-5 h-5 text-blue-600" />
                           <span className="font-semibold text-slate-900">
-                            {new Date(evo.date).toLocaleDateString('pt-BR')}
+                            {formatDate(evo.date)}
                           </span>
                         </div>
                         {evo.current_weight && (
@@ -469,21 +535,31 @@ export function StudentProfile() {
         </Tabs>
       </main>
 
-      {/* Modal Criar Treino */}
+      {/* Modal Adicionar Treino */}
       <Dialog open={showAddWorkout} onOpenChange={setShowAddWorkout}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Criar Novo Treino</DialogTitle>
+            <DialogTitle>Adicionar Treino Realizado</DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleAddWorkout} className="space-y-4" data-testid="create-workout-form">
+          <form onSubmit={handleAddWorkout} className="space-y-4" data-testid="add-workout-form">
             <div>
               <label className="block text-sm font-medium mb-2">Nome do Treino *</label>
               <Input
                 required
                 value={newWorkout.name}
-                onChange={(e) => setNewWorkout({ name: e.target.value })}
+                onChange={(e) => setNewWorkout({ ...newWorkout, name: e.target.value })}
                 placeholder="Ex: Treino A - Peito e Tríceps"
                 data-testid="workout-name-input"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Data da Realização *</label>
+              <Input
+                type="date"
+                required
+                value={newWorkout.date}
+                onChange={(e) => setNewWorkout({ ...newWorkout, date: e.target.value })}
+                data-testid="workout-date-input"
               />
             </div>
             <div className="flex gap-3 pt-4">
@@ -491,7 +567,7 @@ export function StudentProfile() {
                 Cancelar
               </Button>
               <Button type="submit" className="flex-1 bg-blue-600 hover:bg-blue-700" data-testid="submit-workout-button">
-                Criar
+                Adicionar
               </Button>
             </div>
           </form>
@@ -538,6 +614,7 @@ export function StudentProfile() {
                   value={newExercise.rest}
                   onChange={(e) => setNewExercise({ ...newExercise, rest: e.target.value })}
                   data-testid="exercise-rest-input"
+                  className="col-span-2"
                 />
               </div>
               <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" data-testid="submit-exercise-button">
@@ -553,7 +630,7 @@ export function StudentProfile() {
                 exercises.map((ex) => (
                   <div
                     key={ex.id}
-                    className="bg-white border rounded-lg p-4 hover:border-blue-200 transition-all"
+                    className="bg-white border rounded-lg p-4 hover:border-blue-200 transition-all group"
                     data-testid={`exercise-item-${ex.id}`}
                   >
                     <div className="flex justify-between items-start">
@@ -574,7 +651,7 @@ export function StudentProfile() {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteExercise(ex.id)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-red-600 hover:text-red-700 hover:bg-red-50 h-6 w-6 p-0"
                         data-testid={`delete-exercise-${ex.id}`}
                       >
                         <Trash2 className="w-4 h-4" />
@@ -645,7 +722,7 @@ export function StudentProfile() {
                   <div key={hist.id} className="bg-white border rounded-lg p-4">
                     <div className="flex justify-between items-start mb-2">
                       <span className="font-semibold text-slate-900">
-                        {new Date(hist.date).toLocaleDateString('pt-BR')}
+                        {formatDate(hist.date)}
                       </span>
                       {hist.weight && (
                         <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded text-sm">
@@ -668,6 +745,43 @@ export function StudentProfile() {
         </DialogContent>
       </Dialog>
 
+      {/* Modal Detalhes do Cardio */}
+      <Dialog open={showCardioDetails} onOpenChange={setShowCardioDetails}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Detalhes do Cardio</DialogTitle>
+          </DialogHeader>
+          {selectedCardio && (
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-slate-500 block mb-1">Equipamento</label>
+                <p className="text-slate-900 font-medium capitalize">{selectedCardio.equipment}</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm text-slate-500 block mb-1">Duração</label>
+                  <p className="text-slate-900 font-medium">{selectedCardio.duration} minutos</p>
+                </div>
+                <div>
+                  <label className="text-sm text-slate-500 block mb-1">Intensidade</label>
+                  <p className="text-slate-900 font-medium capitalize">{selectedCardio.intensity}</p>
+                </div>
+              </div>
+              <div>
+                <label className="text-sm text-slate-500 block mb-1">Data</label>
+                <p className="text-slate-900 font-medium">{formatDate(selectedCardio.date)}</p>
+              </div>
+              {selectedCardio.observations && (
+                <div>
+                  <label className="text-sm text-slate-500 block mb-1">Observações</label>
+                  <p className="text-slate-700">{selectedCardio.observations}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Modal Adicionar Cardio */}
       <Dialog open={showAddCardio} onOpenChange={setShowAddCardio}>
         <DialogContent>
@@ -675,6 +789,16 @@ export function StudentProfile() {
             <DialogTitle>Adicionar Cardio</DialogTitle>
           </DialogHeader>
           <form onSubmit={handleAddCardio} className="space-y-4" data-testid="add-cardio-form">
+            <div>
+              <label className="block text-sm font-medium mb-2">Data *</label>
+              <Input
+                type="date"
+                required
+                value={newCardio.date}
+                onChange={(e) => setNewCardio({ ...newCardio, date: e.target.value })}
+                data-testid="cardio-date-input"
+              />
+            </div>
             <div>
               <label className="block text-sm font-medium mb-2">Equipamento *</label>
               <Select
