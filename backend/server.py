@@ -59,12 +59,14 @@ class Student(BaseModel):
 class WorkoutCreate(BaseModel):
     student_id: str
     name: str
+    date: Optional[str] = None
 
 class Workout(BaseModel):
     id: str
     user_id: str
     student_id: str
     name: str
+    date: Optional[str] = None
     created_at: str
     updated_at: str
 
