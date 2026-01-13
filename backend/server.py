@@ -114,6 +114,7 @@ class CardioCreate(BaseModel):
     duration: Optional[int] = None
     intensity: Optional[str] = None
     observations: Optional[str] = None
+    date: Optional[str] = None
 
 class Cardio(BaseModel):
     id: str
@@ -123,6 +124,7 @@ class Cardio(BaseModel):
     duration: Optional[int] = None
     intensity: Optional[str] = None
     observations: Optional[str] = None
+    date: Optional[str] = None
     created_at: str
 
 class EvolutionCreate(BaseModel):
