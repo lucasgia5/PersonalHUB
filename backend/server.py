@@ -392,6 +392,49 @@ async def create_evolution(evolution: EvolutionCreate, user_id: str = Depends(ve
         logger.error(f"Erro ao criar evolução: {e}")
         raise HTTPException(status_code=500, detail="Erro ao criar evolução")
 
+@api_router.get("/weekly-routine", response_model=List[WeeklyRoutine])
+async def get_weekly_routine(student_id: str, user_id: str = Depends(verify_token)):
+    try:
+        response = supabase.table("weekly_routine").select("*").eq("student_id", student_id).eq("user_id", user_id).order("day_of_week").execute()
+        return response.data
+    except Exception as e:
+        logger.error(f"Erro ao buscar rotina semanal: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao buscar rotina semanal")
+
+@api_router.post("/weekly-routine", response_model=WeeklyRoutine)
+async def create_weekly_routine(routine: WeeklyRoutineCreate, user_id: str = Depends(verify_token)):
+    try:
+        data = routine.model_dump()
+        data["user_id"] = user_id
+        response = supabase.table("weekly_routine").insert(data).execute()
+        return response.data[0]
+    except Exception as e:
+        logger.error(f"Erro ao criar rotina semanal: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao criar rotina semanal")
+
+@api_router.put("/weekly-routine/{routine_id}", response_model=WeeklyRoutine)
+async def update_weekly_routine(routine_id: str, routine: WeeklyRoutineCreate, user_id: str = Depends(verify_token)):
+    try:
+        data = routine.model_dump()
+        response = supabase.table("weekly_routine").update(data).eq("id", routine_id).eq("user_id", user_id).execute()
+        if not response.data:
+            raise HTTPException(status_code=404, detail="Rotina não encontrada")
+        return response.data[0]
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Erro ao atualizar rotina semanal: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao atualizar rotina semanal")
+
+@api_router.delete("/weekly-routine/{routine_id}")
+async def delete_weekly_routine(routine_id: str, user_id: str = Depends(verify_token)):
+    try:
+        response = supabase.table("weekly_routine").delete().eq("id", routine_id).eq("user_id", user_id).execute()
+        return {"message": "Rotina excluída com sucesso"}
+    except Exception as e:
+        logger.error(f"Erro ao excluir rotina semanal: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao excluir rotina semanal")
+
 app.include_router(api_router)
 
 app.add_middleware(
