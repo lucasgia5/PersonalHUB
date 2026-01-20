@@ -440,6 +440,125 @@ async def delete_weekly_routine(routine_id: str, user_id: str = Depends(verify_t
         logger.error(f"Erro ao excluir rotina semanal: {e}")
         raise HTTPException(status_code=500, detail="Erro ao excluir rotina semanal")
 
+class CheckoutRequest(BaseModel):
+    plan_type: str
+    email: str
+
+class SignupRequest(BaseModel):
+    email: str
+    password: str
+    token: str
+
+@api_router.post("/create-checkout")
+async def create_checkout(request: CheckoutRequest):
+    try:
+        plans = {
+            "monthly": {"price": 5000, "name": "Plano Mensal", "description": "R$ 50/mês"},
+            "semester": {"price": 27000, "name": "Plano Semestral", "description": "R$ 45/mês (6 meses)"},
+            "annual": {"price": 48000, "name": "Plano Anual", "description": "R$ 40/mês (12 meses)"}
+        }
+        
+        if request.plan_type not in plans:
+            raise HTTPException(status_code=400, detail="Plano inválido")
+        
+        plan = plans[request.plan_type]
+        
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'brl',
+                    'unit_amount': plan['price'],
+                    'product_data': {
+                        'name': plan['name'],
+                        'description': plan['description'],
+                    },
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=f"{FRONTEND_URL}/success?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{FRONTEND_URL}/#planos",
+            customer_email=request.email,
+            metadata={
+                'plan_type': request.plan_type,
+                'email': request.email
+            }
+        )
+        
+        return {"checkout_url": checkout_session.url, "session_id": checkout_session.id}
+    except Exception as e:
+        logger.error(f"Erro ao criar checkout: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/verify-payment/{session_id}")
+async def verify_payment(session_id: str):
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+        
+        if session.payment_status != 'paid':
+            raise HTTPException(status_code=400, detail="Pagamento não confirmado")
+        
+        email = session.metadata.get('email') or session.customer_email
+        plan_type = session.metadata.get('plan_type')
+        
+        token = secrets.token_urlsafe(32)
+        expires_at = datetime.now(datetime.timezone.utc) + timedelta(hours=24)
+        
+        supabase.table("purchase_tokens").insert({
+            "token": token,
+            "email": email,
+            "plan_type": plan_type,
+            "stripe_session_id": session_id,
+            "used": False,
+            "expires_at": expires_at.isoformat()
+        }).execute()
+        
+        return {
+            "valid": True,
+            "token": token,
+            "email": email,
+            "plan_type": plan_type
+        }
+    except stripe.error.StripeError as e:
+        logger.error(f"Erro do Stripe: {e}")
+        raise HTTPException(status_code=400, detail="Sessão de pagamento inválida")
+    except Exception as e:
+        logger.error(f"Erro ao verificar pagamento: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/signup")
+async def signup(request: SignupRequest):
+    try:
+        token_response = supabase.table("purchase_tokens").select("*").eq("token", request.token).eq("email", request.email).eq("used", False).execute()
+        
+        if not token_response.data or len(token_response.data) == 0:
+            raise HTTPException(status_code=400, detail="Token inválido ou já utilizado")
+        
+        token_data = token_response.data[0]
+        expires_at = datetime.fromisoformat(token_data['expires_at'].replace('Z', '+00:00'))
+        
+        if expires_at < datetime.now(datetime.timezone.utc):
+            raise HTTPException(status_code=400, detail="Token expirado")
+        
+        auth_response = supabase.auth.admin.create_user({
+            "email": request.email,
+            "password": request.password,
+            "email_confirm": True
+        })
+        
+        supabase.table("purchase_tokens").update({"used": True}).eq("token", request.token).execute()
+        
+        return {
+            "message": "Conta criada com sucesso!",
+            "user_id": auth_response.user.id
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Erro ao criar conta: {e}")
+        raise HTTPException(status_code=500, detail="Erro ao criar conta")
+
 app.include_router(api_router)
 
 app.add_middleware(
