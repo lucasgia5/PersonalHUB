@@ -499,7 +499,7 @@ async def verify_payment(session_id: str):
         plan_type = session.metadata.get('plan_type')
         
         token = secrets.token_urlsafe(32)
-        expires_at = datetime.now(datetime.timezone.utc) + timedelta(hours=24)
+        expires_at = datetime.now(timezone.utc) + timedelta(hours=24)
         
         supabase.table("purchase_tokens").insert({
             "token": token,
