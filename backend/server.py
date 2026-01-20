@@ -18,7 +18,10 @@ load_dotenv(ROOT_DIR / '.env')
 SUPABASE_URL = os.environ['SUPABASE_URL']
 SUPABASE_ANON_KEY = os.environ['SUPABASE_ANON_KEY']
 SUPABASE_SERVICE_KEY = os.environ['SUPABASE_SERVICE_ROLE_KEY']
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
 
+stripe.api_key = STRIPE_SECRET_KEY
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 app = FastAPI()
