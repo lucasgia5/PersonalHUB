@@ -492,7 +492,7 @@ async def verify_payment(session_id: str):
     try:
         session = stripe.checkout.Session.retrieve(session_id)
         
-        if session.payment_status != 'paid':
+        if session.payment_status != 'paid' and session.status != 'complete':
             raise HTTPException(status_code=400, detail="Pagamento não confirmado")
         
         email = session.metadata.get('email') or session.customer_email
