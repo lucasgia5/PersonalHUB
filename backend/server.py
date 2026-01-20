@@ -534,7 +534,7 @@ async def signup(request: SignupRequest):
         token_data = token_response.data[0]
         expires_at = datetime.fromisoformat(token_data['expires_at'].replace('Z', '+00:00'))
         
-        if expires_at < datetime.now(datetime.timezone.utc):
+        if expires_at < datetime.now(timezone.utc):
             raise HTTPException(status_code=400, detail="Token expirado")
         
         auth_response = supabase.auth.admin.create_user({
