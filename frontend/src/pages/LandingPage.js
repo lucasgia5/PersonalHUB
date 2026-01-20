@@ -10,7 +10,11 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`
 export function LandingPage() {
   const navigate = useNavigate()
   const [checkoutLoading, setCheckoutLoading] = useState(null)
-  const [email, setEmail] = useState('')
+  const [planEmails, setPlanEmails] = useState({
+    monthly: '',
+    semester: '',
+    annual: ''
+  })
   const [faqOpen, setFaqOpen] = useState(null)
 
   const scrollToSection = (id) => {
@@ -20,8 +24,17 @@ export function LandingPage() {
     }
   }
 
-  async function handleCheckout(planType, planEmail) {
-    if (!planEmail || !planEmail.includes('@')) {
+  const handleEmailChange = (planType, value) => {
+    setPlanEmails(prev => ({
+      ...prev,
+      [planType]: value
+    }))
+  }
+
+  async function handleCheckout(planType) {
+    const email = planEmails[planType]
+    
+    if (!email || !email.includes('@')) {
       toast.error('Digite um email válido')
       return
     }
@@ -30,12 +43,12 @@ export function LandingPage() {
     try {
       const response = await axios.post(`${API}/create-checkout`, {
         plan_type: planType,
-        email: planEmail
+        email: email.trim()
       })
       window.location.href = response.data.checkout_url
     } catch (error) {
       console.error('Erro ao criar checkout:', error)
-      toast.error('Erro ao processar pagamento')
+      toast.error('Erro ao processar pagamento. Tente novamente.')
       setCheckoutLoading(null)
     }
   }
@@ -60,6 +73,58 @@ export function LandingPage() {
     {
       question: 'Como funciona o acesso após pagar?',
       answer: 'Após a confirmação do pagamento, você receberá um link para criar sua conta. É super rápido! Em menos de 2 minutos você já estará cadastrando seus primeiros alunos.'
+    }
+  ]
+
+  const plans = [
+    {
+      name: 'Mensal',
+      price: 'R$ 50',
+      period: '/mês',
+      total: 'Total: R$ 50,00',
+      type: 'monthly',
+      badge: null,
+      features: [
+        'Alunos ilimitados',
+        'Rotina semanal',
+        'Histórico de treinos',
+        'Registro de cardio',
+        'Evolução do aluno',
+        'Suporte por email'
+      ]
+    },
+    {
+      name: 'Semestral',
+      price: 'R$ 45',
+      period: '/mês',
+      total: 'Total: R$ 270,00',
+      type: 'semester',
+      badge: 'Economize R$ 30',
+      features: [
+        'Alunos ilimitados',
+        'Rotina semanal',
+        'Histórico de treinos',
+        'Registro de cardio',
+        'Evolução do aluno',
+        'Suporte prioritário'
+      ]
+    },
+    {
+      name: 'Anual',
+      price: 'R$ 40',
+      period: '/mês',
+      total: 'Total: R$ 480,00',
+      type: 'annual',
+      badge: 'Melhor custo-benefício',
+      badgeColor: 'green',
+      features: [
+        'Alunos ilimitados',
+        'Rotina semanal',
+        'Histórico de treinos',
+        'Registro de cardio',
+        'Evolução do aluno',
+        'Suporte VIP'
+      ]
     }
   ]
 
@@ -222,61 +287,11 @@ export function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {[
-              {
-                name: 'Mensal',
-                price: 'R$ 50',
-                period: '/mês',
-                total: 'Total: R$ 50,00',
-                type: 'monthly',
-                badge: null,
-                features: [
-                  'Alunos ilimitados',
-                  'Rotina semanal',
-                  'Histórico de treinos',
-                  'Registro de cardio',
-                  'Evolução do aluno',
-                  'Suporte por email'
-                ]
-              },
-              {
-                name: 'Semestral',
-                price: 'R$ 45',
-                period: '/mês',
-                total: 'Total: R$ 270,00',
-                type: 'semester',
-                badge: 'Economize R$ 30',
-                features: [
-                  'Alunos ilimitados',
-                  'Rotina semanal',
-                  'Histórico de treinos',
-                  'Registro de cardio',
-                  'Evolução do aluno',
-                  'Suporte prioritário'
-                ]
-              },
-              {
-                name: 'Anual',
-                price: 'R$ 40',
-                period: '/mês',
-                total: 'Total: R$ 480,00',
-                type: 'annual',
-                badge: 'Melhor custo-benefício',
-                badgeColor: 'green',
-                features: [
-                  'Alunos ilimitados',
-                  'Rotina semanal',
-                  'Histórico de treinos',
-                  'Registro de cardio',
-                  'Evolução do aluno',
-                  'Suporte VIP'
-                ]
-              }
-            ].map((plan, index) => (
+            {plans.map((plan, index) => (
               <div
                 key={index}
                 className={`bg-white rounded-xl p-8 border-2 ${
-                  plan.badge && plan.badgeColor === 'green' 
+                  plan.badgeColor === 'green' 
                     ? 'border-green-500 shadow-xl scale-105' 
                     : 'border-slate-200 shadow-sm'
                 } hover:shadow-lg transition-all relative`}
@@ -303,8 +318,10 @@ export function LandingPage() {
                   <input
                     type="email"
                     placeholder="Seu email"
+                    value={planEmails[plan.type]}
+                    onChange={(e) => handleEmailChange(plan.type, e.target.value)}
+                    onBlur={(e) => handleEmailChange(plan.type, e.target.value.trim())}
                     className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-                    onChange={(e) => setEmail(e.target.value)}
                     data-testid={`email-input-${plan.type}`}
                   />
                 </div>
@@ -319,8 +336,8 @@ export function LandingPage() {
                 </ul>
 
                 <Button
-                  onClick={() => handleCheckout(plan.type, email)}
-                  disabled={checkoutLoading === plan.type}
+                  onClick={() => handleCheckout(plan.type)}
+                  disabled={checkoutLoading === plan.type || !planEmails[plan.type]}
                   className={`w-full rounded-full py-6 ${
                     plan.badgeColor === 'green'
                       ? 'bg-green-600 hover:bg-green-700'
