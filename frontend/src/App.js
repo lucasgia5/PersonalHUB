@@ -1,7 +1,10 @@
 import "@/App.css";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { LandingPage } from "@/pages/LandingPage";
 import { Login } from "@/pages/Login";
+import { SignupPage } from "@/pages/SignupPage";
+import { SuccessPage } from "@/pages/SuccessPage";
 import { Dashboard } from "@/pages/Dashboard";
 import { StudentProfile } from "@/pages/StudentProfile";
 import { Toaster } from '@/components/ui/sonner'
@@ -32,7 +35,10 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/success" element={<SuccessPage />} />
           <Route
             path="/dashboard"
             element={
@@ -49,7 +55,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/app" element={<Navigate to="/dashboard" replace />} />
         </Routes>
         <Toaster position="top-right" />
       </BrowserRouter>
