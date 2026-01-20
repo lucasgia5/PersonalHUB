@@ -456,9 +456,9 @@ class SignupRequest(BaseModel):
 async def create_checkout(request: CheckoutRequest):
     try:
         plans = {
-            "monthly": {"price": 5000, "name": "Plano Mensal", "description": "R$ 50/mês"},
-            "semester": {"price": 27000, "name": "Plano Semestral", "description": "R$ 45/mês (6 meses)"},
-            "annual": {"price": 48000, "name": "Plano Anual", "description": "R$ 40/mês (12 meses)"}
+            "monthly": {"price_id": STRIPE_PRICE_MONTHLY, "name": "Plano Mensal"},
+            "semester": {"price_id": STRIPE_PRICE_SEMIANNUAL, "name": "Plano Semestral"},
+            "annual": {"price_id": STRIPE_PRICE_ANNUAL, "name": "Plano Anual"}
         }
         
         if request.plan_type not in plans:
@@ -469,17 +469,10 @@ async def create_checkout(request: CheckoutRequest):
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
-                'price_data': {
-                    'currency': 'brl',
-                    'unit_amount': plan['price'],
-                    'product_data': {
-                        'name': plan['name'],
-                        'description': plan['description'],
-                    },
-                },
+                'price': plan['price_id'],
                 'quantity': 1,
             }],
-            mode='payment',
+            mode='subscription',
             success_url=f"{FRONTEND_URL}/success?session_id={{CHECKOUT_SESSION_ID}}",
             cancel_url=f"{FRONTEND_URL}/#planos",
             customer_email=request.email,
