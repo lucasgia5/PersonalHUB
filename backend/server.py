@@ -557,10 +557,14 @@ async def signup(request: SignupRequest):
 
 app.include_router(api_router)
 
+origins_env = os.environ.get("CORS_ORIGINS", "*")
+origins = [o.strip() for o in origins_env.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_credentials=False,  # ✅ importante
+    allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
