@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, Loader2 } from 'lucide-react'
+import { Logo } from '@/components/Logo'
 import axios from 'axios'
 import { toast } from 'sonner'
 
@@ -45,7 +46,7 @@ export function SuccessPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
           <p className="text-slate-600">Verificando seu pagamento...</p>
@@ -56,7 +57,7 @@ export function SuccessPage() {
 
   if (!paymentData) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center max-w-md">
           <p className="text-slate-600 mb-4">Pagamento não encontrado</p>
           <Button onClick={() => navigate('/')}>Voltar para início</Button>
@@ -66,11 +67,11 @@ export function SuccessPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="max-w-2xl w-full">
-        <div className="bg-white rounded-xl shadow-lg p-8 md:p-12 text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-12 h-12 text-green-600" />
+        <div className="bg-white rounded-2xl shadow-lg border-2 border-slate-100 p-8 md:p-12 text-center">
+          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-12 h-12 text-blue-600" />
           </div>
           
           <h1 
@@ -82,27 +83,29 @@ export function SuccessPage() {
           </h1>
           
           <p className="text-lg text-slate-600 mb-8">
-            Obrigado por assinar o PersonalHub! Agora você pode criar sua conta e começar a gerenciar seus alunos.
+            Obrigado por assinar o PersonalPlanner! Agora você pode criar sua conta e começar a gerenciar seus alunos.
           </p>
 
-          <div className="bg-blue-50 rounded-lg p-6 mb-8 text-left">
-            <h3 className="font-semibold text-slate-900 mb-2">Detalhes da compra:</h3>
-            <p className="text-slate-700">
-              <span className="font-medium">Email:</span> {paymentData.email}
-            </p>
-            <p className="text-slate-700">
-              <span className="font-medium">Plano:</span> {
-                paymentData.plan_type === 'monthly' ? 'Mensal (R$ 50/mês)' :
-                paymentData.plan_type === 'semester' ? 'Semestral (R$ 45/mês)' :
-                'Anual (R$ 40/mês)'
-              }
-            </p>
+          <div className="bg-blue-50 rounded-xl p-6 mb-8 text-left border border-blue-200">
+            <h3 className="font-semibold text-slate-900 mb-3">Detalhes da compra:</h3>
+            <div className="space-y-2">
+              <p className="text-slate-700">
+                <span className="font-medium">Email:</span> {paymentData.email}
+              </p>
+              <p className="text-slate-700">
+                <span className="font-medium">Plano:</span> {
+                  paymentData.plan_type === 'monthly' ? 'Mensal (R$ 50/mês)' :
+                  paymentData.plan_type === 'semester' ? 'Semestral (R$ 45/mês)' :
+                  'Anual (R$ 40/mês)'
+                }
+              </p>
+            </div>
           </div>
 
           <Button
             onClick={handleCreateAccount}
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 rounded-full text-lg px-8 py-6"
+            className="bg-blue-600 hover:bg-blue-700 text-white rounded-full text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all font-semibold"
             data-testid="create-account-button"
           >
             Criar Minha Conta Agora
