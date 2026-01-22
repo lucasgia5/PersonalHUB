@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Dumbbell, Check, Users, Calendar, TrendingUp, FileText, ChevronRight } from 'lucide-react'
+import { Logo } from '@/components/Logo'
+import { Check, Users, Calendar, TrendingUp, FileText, ChevronRight, Dumbbell, BarChart3 } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import axios from 'axios'
@@ -64,15 +65,15 @@ export function LandingPage() {
     },
     {
       question: 'Posso usar no celular?',
-      answer: 'Sim! O PersonalHub é totalmente responsivo e funciona perfeitamente em smartphones, tablets e computadores. Acesse de qualquer lugar!'
+      answer: 'Sim! O PersonalPlanner é totalmente responsivo e funciona perfeitamente em smartphones, tablets e computadores. Acesse de qualquer lugar!'
     },
     {
       question: 'Preciso ter muitos alunos?',
-      answer: 'Não! O PersonalHub é ideal tanto para quem está começando quanto para quem já tem muitos alunos. Você pode cadastrar alunos ilimitados em qualquer plano.'
+      answer: 'Não! O PersonalPlanner é ideal tanto para quem está começando quanto para quem já tem muitos alunos. Você pode cadastrar alunos ilimitados em qualquer plano.'
     },
     {
       question: 'Como funciona o acesso após pagar?',
-      answer: 'Após a confirmação do pagamento, você receberá um link para criar sua conta. É super rápido! Em menos de 2 minutos você já estará cadastrando seus primeiros alunos.'
+      answer: 'Após a confirmação do pagamento, você poderá criar sua conta imediatamente. É super rápido! Em menos de 2 minutos você já estará cadastrando seus primeiros alunos.'
     }
   ]
 
@@ -116,7 +117,7 @@ export function LandingPage() {
       total: 'Total: R$ 480,00',
       type: 'annual',
       badge: 'Melhor custo-benefício',
-      badgeColor: 'green',
+      badgeColor: 'blue',
       features: [
         'Alunos ilimitados',
         'Rotina semanal',
@@ -129,31 +130,24 @@ export function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <nav className="bg-white border-b border-slate-200 sticky top-0 z-50" data-testid="landing-header">
+      <nav className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm" data-testid="landing-header">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+            <Logo />
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
-                <Dumbbell className="w-5 h-5 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold text-slate-900" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                PersonalHub
-              </h1>
-            </div>
-            <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
                 onClick={() => navigate('/login')}
-                className="hidden sm:inline-flex"
+                className="text-slate-700 hover:text-blue-600 font-medium"
                 data-testid="header-login-button"
               >
                 Entrar
               </Button>
               <Button
                 onClick={() => scrollToSection('planos')}
-                className="bg-blue-600 hover:bg-blue-700 rounded-full"
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6"
                 data-testid="header-plans-button"
               >
                 Ver Planos
@@ -164,7 +158,7 @@ export function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 lg:py-32 bg-gradient-to-b from-white to-slate-50">
+      <section className="py-16 lg:py-24 bg-gradient-to-b from-blue-50 to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <h1 
@@ -174,16 +168,16 @@ export function LandingPage() {
             >
               Organize seus alunos.<br />
               Prove resultados.<br />
-              Economize tempo.
+              <span className="text-blue-600">Economize tempo.</span>
             </h1>
-            <p className="text-lg sm:text-xl text-slate-600 mb-8 leading-relaxed">
-              PersonalHub é um sistema profissional para personal trainers gerenciarem alunos, treinos, cardio e evolução em um só lugar.
+            <p className="text-lg sm:text-xl text-slate-600 mb-8 leading-relaxed max-w-2xl mx-auto">
+              PersonalPlanner é o sistema profissional para personal trainers gerenciarem alunos, treinos, cardio e evolução em um só lugar.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 onClick={() => scrollToSection('planos')}
                 size="lg"
-                className="bg-blue-600 hover:bg-blue-700 rounded-full text-lg px-8 py-6"
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
                 data-testid="hero-cta-primary"
               >
                 Assinar Agora
@@ -193,7 +187,7 @@ export function LandingPage() {
                 onClick={() => scrollToSection('funcionalidades')}
                 size="lg"
                 variant="outline"
-                className="rounded-full text-lg px-8 py-6"
+                className="rounded-full text-lg px-8 py-6 border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
                 data-testid="hero-cta-secondary"
               >
                 Ver Funcionalidades
@@ -213,7 +207,7 @@ export function LandingPage() {
             >
               Tudo que você precisa em um só lugar
             </h2>
-            <p className="text-lg text-slate-600">
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Pare de usar planilhas, WhatsApp e cadernos. Tenha tudo organizado profissionalmente.
             </p>
           </div>
@@ -236,33 +230,33 @@ export function LandingPage() {
                 description: 'Adicione exercícios realizados com séries, repetições, carga e descanso. Acompanhe o histórico completo.'
               },
               {
-                icon: TrendingUp,
+                icon: BarChart3,
                 title: 'Histórico por Exercício',
                 description: 'Veja a evolução de cada exercício ao longo do tempo. Registre peso, séries e reps de cada treino realizado.'
               },
               {
-                icon: FileText,
+                icon: TrendingUp,
                 title: 'Cardio e Evolução',
                 description: 'Registre cardio (esteira, bike, etc) com duração e intensidade. Acompanhe evolução de peso e performance.'
               },
               {
-                icon: Check,
+                icon: FileText,
                 title: 'Dados Seguros',
                 description: 'Seus dados e dos seus alunos ficam protegidos com criptografia. Cada personal acessa apenas suas informações.'
               }
             ].map((feature, index) => (
               <div 
                 key={index}
-                className="bg-slate-50 rounded-xl p-6 hover:shadow-lg transition-shadow"
+                className="bg-white rounded-2xl p-8 border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all"
                 data-testid={`feature-${index}`}
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-blue-600" />
+                <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                  <feature.icon className="w-7 h-7 text-blue-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-2">
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-slate-600 leading-relaxed">
                   {feature.description}
                 </p>
               </div>
@@ -290,16 +284,16 @@ export function LandingPage() {
             {plans.map((plan, index) => (
               <div
                 key={index}
-                className={`bg-white rounded-xl p-8 border-2 ${
-                  plan.badgeColor === 'green' 
-                    ? 'border-green-500 shadow-xl scale-105' 
+                className={`bg-white rounded-2xl p-8 border-2 ${
+                  plan.badgeColor === 'blue' 
+                    ? 'border-blue-500 shadow-xl scale-105' 
                     : 'border-slate-200 shadow-sm'
                 } hover:shadow-lg transition-all relative`}
                 data-testid={`plan-${plan.type}`}
               >
                 {plan.badge && (
                   <div className={`absolute -top-4 left-1/2 transform -translate-x-1/2 ${
-                    plan.badgeColor === 'green' ? 'bg-green-500' : 'bg-blue-500'
+                    plan.badgeColor === 'blue' ? 'bg-blue-600' : 'bg-blue-500'
                   } text-white px-4 py-1 rounded-full text-sm font-medium`}>
                     {plan.badge}
                   </div>
@@ -321,7 +315,7 @@ export function LandingPage() {
                     value={planEmails[plan.type]}
                     onChange={(e) => handleEmailChange(plan.type, e.target.value)}
                     onBlur={(e) => handleEmailChange(plan.type, e.target.value.trim())}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+                    className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-3"
                     data-testid={`email-input-${plan.type}`}
                   />
                 </div>
@@ -329,7 +323,9 @@ export function LandingPage() {
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start gap-3">
-                      <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Check className="w-3 h-3 text-blue-600" />
+                      </div>
                       <span className="text-slate-600">{feature}</span>
                     </li>
                   ))}
@@ -338,11 +334,11 @@ export function LandingPage() {
                 <Button
                   onClick={() => handleCheckout(plan.type)}
                   disabled={checkoutLoading === plan.type || !planEmails[plan.type]}
-                  className={`w-full rounded-full py-6 ${
-                    plan.badgeColor === 'green'
-                      ? 'bg-green-600 hover:bg-green-700'
+                  className={`w-full rounded-full py-6 font-semibold text-base ${
+                    plan.badgeColor === 'blue'
+                      ? 'bg-blue-600 hover:bg-blue-700'
                       : 'bg-blue-600 hover:bg-blue-700'
-                  }`}
+                  } text-white shadow-md hover:shadow-lg transition-all`}
                   data-testid={`checkout-button-${plan.type}`}
                 >
                   {checkoutLoading === plan.type ? 'Processando...' : 'Assinar Agora'}
@@ -369,22 +365,22 @@ export function LandingPage() {
             {faqs.map((faq, index) => (
               <div 
                 key={index}
-                className="bg-slate-50 rounded-xl overflow-hidden"
+                className="bg-white rounded-xl overflow-hidden border-2 border-slate-200"
                 data-testid={`faq-${index}`}
               >
                 <button
                   onClick={() => setFaqOpen(faqOpen === index ? null : index)}
-                  className="w-full text-left px-6 py-4 flex justify-between items-center hover:bg-slate-100 transition-colors"
+                  className="w-full text-left px-6 py-5 flex justify-between items-center hover:bg-slate-50 transition-colors"
                 >
-                  <span className="font-semibold text-slate-900">{faq.question}</span>
+                  <span className="font-semibold text-slate-900 pr-4">{faq.question}</span>
                   <ChevronRight 
-                    className={`w-5 h-5 text-slate-400 transition-transform ${
+                    className={`w-5 h-5 text-blue-600 transition-transform flex-shrink-0 ${
                       faqOpen === index ? 'rotate-90' : ''
                     }`}
                   />
                 </button>
                 {faqOpen === index && (
-                  <div className="px-6 pb-4 text-slate-600">
+                  <div className="px-6 pb-5 text-slate-600 leading-relaxed">
                     {faq.answer}
                   </div>
                 )}
@@ -399,12 +395,10 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
-                  <Dumbbell className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="text-xl font-bold" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                  PersonalHub
+              <div className="mb-4">
+                <Logo className="h-10 brightness-0 invert" showText={false} />
+                <h3 className="text-xl font-bold mt-2" style={{ fontFamily: 'Manrope, sans-serif' }}>
+                  PersonalPlanner
                 </h3>
               </div>
               <p className="text-slate-400">
@@ -423,14 +417,14 @@ export function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Contato</h4>
               <ul className="space-y-2 text-slate-400">
-                <li>suporte@personalhub.com</li>
+                <li>suporte@personalplanner.com</li>
                 <li>WhatsApp: (11) 99999-9999</li>
               </ul>
             </div>
           </div>
 
           <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-            <p>&copy; 2025 PersonalHub. Todos os direitos reservados.</p>
+            <p>&copy; 2025 PersonalPlanner. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
