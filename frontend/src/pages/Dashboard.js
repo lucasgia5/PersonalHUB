@@ -286,9 +286,17 @@ export function Dashboard() {
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl">
-                      {student.name[0].toUpperCase()}
-                    </div>
+                    {student.photo_url ? (
+                      <img 
+                        src={student.photo_url} 
+                        alt={student.name}
+                        className="w-14 h-14 rounded-full object-cover border-2 border-blue-200"
+                      />
+                    ) : (
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl">
+                        {student.name[0].toUpperCase()}
+                      </div>
+                    )}
                     <div>
                       <h3 className="font-semibold text-slate-900 text-lg">{student.name}</h3>
                       {student.age && <p className="text-sm text-slate-500">{student.age} anos</p>}
