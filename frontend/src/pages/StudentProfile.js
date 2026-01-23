@@ -501,24 +501,29 @@ export function StudentProfile() {
           </TabsContent>
 
           <TabsContent value="evolution">
-            <div>
+            <div className="space-y-6">
               <Button
                 onClick={() => setShowAddEvolution(true)}
-                className="bg-blue-600 hover:bg-blue-700 rounded-full mb-6"
+                className="bg-blue-600 hover:bg-blue-700 rounded-full"
                 data-testid="add-evolution-button"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Registro
               </Button>
 
-              {evolutions.length === 0 ? (
-                <div className="bg-white rounded-xl p-8 text-center border border-slate-100">
-                  <TrendingUp className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-                  <p className="text-slate-500">Nenhuma evolução registrada</p>
+              <WeightEvolutionChart evolutions={evolutions} goal={student?.goal} />
+
+              <div className="bg-white rounded-xl divide-y border border-slate-100">
+                <div className="p-4 bg-slate-50">
+                  <h3 className="font-semibold text-slate-900">Histórico Completo</h3>
                 </div>
-              ) : (
-                <div className="bg-white rounded-xl divide-y border border-slate-100">
-                  {evolutions.map((evo) => (
+                {evolutions.length === 0 ? (
+                  <div className="p-8 text-center">
+                    <TrendingUp className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                    <p className="text-slate-500">Nenhuma evolução registrada</p>
+                  </div>
+                ) : (
+                  evolutions.map((evo) => (
                     <div key={evo.id} className="p-6">
                       <div className="flex justify-between items-start mb-3">
                         <div className="flex items-center gap-3">
