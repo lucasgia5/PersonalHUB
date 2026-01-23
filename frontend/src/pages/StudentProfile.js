@@ -314,16 +314,33 @@ export function StudentProfile() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-slate-100">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-2xl">
-              {student.name[0].toUpperCase()}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              {student.photo_url ? (
+                <img 
+                  src={student.photo_url} 
+                  alt={student.name}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-blue-200"
+                />
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-2xl">
+                  {student.name[0].toUpperCase()}
+                </div>
+              )}
+              <div>
+                <h1 className="text-3xl font-bold text-slate-900" style={{ fontFamily: 'Manrope, sans-serif' }}>
+                  {student.name}
+                </h1>
+                <p className="text-slate-600">{student.age ? `${student.age} anos` : 'Idade não informada'}</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-slate-900" style={{ fontFamily: 'Manrope, sans-serif' }}>
-                {student.name}
-              </h1>
-              <p className="text-slate-600">{student.age ? `${student.age} anos` : 'Idade não informada'}</p>
-            </div>
+            <Button
+              onClick={() => generateStudentPDF(student, workouts, cardios, evolutions)}
+              className="bg-blue-600 hover:bg-blue-700 text-white rounded-full"
+            >
+              <FileDown className="w-4 h-4 mr-2" />
+              Baixar PDF
+            </Button>
           </div>
         </div>
 
