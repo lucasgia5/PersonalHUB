@@ -7,8 +7,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { WeightEvolutionChart } from '@/components/WeightEvolutionChart'
+import { generateStudentPDF } from '@/utils/pdfGenerator'
 import { toast } from 'sonner'
-import { ArrowLeft, Plus, Dumbbell, Activity, TrendingUp, Trash2, Calendar } from 'lucide-react'
+import { ArrowLeft, Plus, Dumbbell, Activity, TrendingUp, Trash2, Calendar, FileDown } from 'lucide-react'
 import { WeeklyRoutine } from '@/components/WeeklyRoutine'
 import axios from 'axios'
 
