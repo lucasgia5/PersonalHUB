@@ -551,9 +551,9 @@ export function StudentProfile() {
                         </div>
                       )}
                     </div>
-                  ))}
-                </div>
-              )}
+                  ))
+                )}
+              </div>
             </div>
           </TabsContent>
         </Tabs>
