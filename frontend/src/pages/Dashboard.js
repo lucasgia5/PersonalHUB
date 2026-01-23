@@ -217,6 +217,12 @@ export function Dashboard() {
                     data-testid="student-goal-input"
                   />
                 </div>
+                <PhotoUpload
+                  userId={user?.id}
+                  studentId="new"
+                  currentPhotoUrl={newStudent.photo_url}
+                  onPhotoUploaded={(url) => setNewStudent({ ...newStudent, photo_url: url })}
+                />
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">Observações</label>
                   <Textarea
