@@ -3,8 +3,8 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Logo } from '@/components/Logo'
 import { toast } from 'sonner'
-import { Dumbbell } from 'lucide-react'
 
 export function Login() {
   const [email, setEmail] = useState('')
@@ -30,29 +30,33 @@ export function Login() {
   }
 
   return (
-    <div className="min-h-screen flex">
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1745329532608-bbda3b742e00?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTJ8MHwxfHNlYXJjaHwxfHxwZXJzb25hbCUyMHRyYWluZXIlMjBneW0lMjB3b3Jrb3V0fGVufDB8fHx8MTc2ODMzMjIyM3ww&ixlib=rb-4.1.0&q=85"
-          alt="Personal trainer"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 to-transparent" />
+    <div className="min-h-screen flex bg-white">
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-gradient-to-br from-blue-600 to-blue-800">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1200')] bg-cover bg-center opacity-20" />
+        <div className="relative z-10 flex flex-col justify-center p-12 text-white">
+          <Logo className="h-16 brightness-0 invert mb-8" />
+          <h1 className="text-4xl font-bold mb-4" style={{ fontFamily: 'Manrope, sans-serif' }}>
+            Bem-vindo ao PersonalPlanner
+          </h1>
+          <p className="text-xl text-blue-100">
+            Gerencie seus alunos, treinos e evolução em um só lugar
+          </p>
+        </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-8 bg-slate-50">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-600 mb-4">
-              <Dumbbell className="w-8 h-8 text-white" data-testid="login-logo-icon" />
+            <div className="inline-block lg:hidden mb-6">
+              <Logo />
             </div>
-            <h1 className="text-4xl font-bold text-slate-900 mb-2" style={{ fontFamily: 'Manrope, sans-serif' }} data-testid="login-title">
-              PersonalHub
+            <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-2" style={{ fontFamily: 'Manrope, sans-serif' }} data-testid="login-title">
+              Entrar na sua conta
             </h1>
-            <p className="text-slate-600">Acesse sua conta profissional</p>
+            <p className="text-slate-600">Acesse o painel profissional</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm p-8 border border-slate-100">
+          <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 border-2 border-slate-100">
             <form onSubmit={handleLogin} className="space-y-6" data-testid="login-form">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
@@ -65,7 +69,7 @@ export function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="bg-slate-50 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg h-11"
+                  className="bg-white border-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl h-12"
                   data-testid="login-email-input"
                 />
               </div>
@@ -81,26 +85,20 @@ export function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="bg-slate-50 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-lg h-11"
+                  className="bg-white border-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl h-12"
                   data-testid="login-password-input"
                 />
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-blue-600 text-white hover:bg-blue-700 rounded-full px-6 py-2 font-medium transition-all active:scale-95 h-11"
+                className="w-full bg-blue-600 text-white hover:bg-blue-700 rounded-full px-6 py-3 font-semibold text-base transition-all active:scale-95 h-12 shadow-md hover:shadow-lg"
                 disabled={loading}
                 data-testid="login-submit-button"
               >
                 {loading ? 'Entrando...' : 'Entrar'}
               </Button>
             </form>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-slate-500">
-                Teste: teste@gmail.com / teste
-              </p>
-            </div>
           </div>
         </div>
       </div>

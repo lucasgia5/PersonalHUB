@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Dumbbell } from 'lucide-react'
+import { Logo } from '@/components/Logo'
 import axios from 'axios'
 import { toast } from 'sonner'
 
@@ -63,11 +63,11 @@ export function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-600 mb-4">
-            <Dumbbell className="w-8 h-8 text-white" />
+          <div className="inline-block mb-6">
+            <Logo />
           </div>
           <h1 
             className="text-3xl font-bold text-slate-900 mb-2" 
@@ -77,11 +77,11 @@ export function SignupPage() {
             Criar Sua Conta
           </h1>
           <p className="text-slate-600">
-            Último passo para começar a usar o PersonalHub
+            Último passo para começar a usar o PersonalPlanner
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-8 border border-slate-100">
+        <div className="bg-white rounded-2xl shadow-sm p-8 border-2 border-slate-100">
           <form onSubmit={handleSubmit} className="space-y-6" data-testid="signup-form">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
@@ -94,7 +94,7 @@ export function SignupPage() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
                 disabled
-                className="bg-slate-100"
+                className="bg-slate-100 border-2 border-slate-200 rounded-xl h-12"
                 data-testid="signup-email-input"
               />
             </div>
@@ -111,7 +111,7 @@ export function SignupPage() {
                 required
                 minLength={6}
                 placeholder="••••••••"
-                className="bg-slate-50"
+                className="bg-white border-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl h-12"
                 data-testid="signup-password-input"
               />
             </div>
@@ -128,14 +128,14 @@ export function SignupPage() {
                 required
                 minLength={6}
                 placeholder="••••••••"
-                className="bg-slate-50"
+                className="bg-white border-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 rounded-xl h-12"
                 data-testid="signup-confirm-password-input"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 rounded-full py-6"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-full py-6 font-semibold shadow-md hover:shadow-lg transition-all"
               disabled={loading}
               data-testid="signup-submit-button"
             >
@@ -145,7 +145,7 @@ export function SignupPage() {
 
           <p className="text-sm text-slate-500 text-center mt-6">
             Ao criar sua conta, você concorda com nossos{' '}
-            <a href="#" className="text-blue-600 hover:underline">Termos de Uso</a>
+            <a href="#" className="text-blue-600 hover:underline font-medium">Termos de Uso</a>
           </p>
         </div>
       </div>
