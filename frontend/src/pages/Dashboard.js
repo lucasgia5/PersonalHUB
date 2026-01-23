@@ -77,6 +77,7 @@ export function Dashboard() {
         observations: '',
         initial_weight: '',
         height: '',
+        photo_url: '',
       })
       loadStudents()
     } catch (error) {
