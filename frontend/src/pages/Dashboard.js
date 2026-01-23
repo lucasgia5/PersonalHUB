@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Logo } from '@/components/Logo'
+import { PhotoUpload } from '@/components/PhotoUpload'
 import { toast } from 'sonner'
 import { Plus, Users, LogOut, User } from 'lucide-react'
 import axios from 'axios'
@@ -25,6 +26,7 @@ export function Dashboard() {
     observations: '',
     initial_weight: '',
     height: '',
+    photo_url: '',
   })
 
   useEffect(() => {
